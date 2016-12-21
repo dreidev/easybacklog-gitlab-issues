@@ -16,7 +16,17 @@ def get_sprint_stories(sprint_id):
         headers={
             "Authorization": "token %s" % EASYBACKLOG_SECRET
         })
-    return json.loads(r.data)
+    stories = []
+    for story_id in json.loads(r.data):
+        r = http.request(
+            "GET",
+            "https://easybacklog.com/api/stories/%s" % story_id[
+                'story_id'],
+            headers={
+                "Authorization": "token %s" % EASYBACKLOG_SECRET
+            })
+        stories.append(json.loads(r.data))
+    return stories
 
 
 def get_theme_stories(theme_id):
